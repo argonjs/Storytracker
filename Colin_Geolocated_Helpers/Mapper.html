@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 70%;
+      }
+	  #list {
+		height: 30%;
+		word-wrap: break-word;
+	  }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+	<div id="list"></div>
+    <script>
+      var map;
+	  var markerList = [];
+	  var mList = [];
+	  var elevator;
+	  var elevations = [];
+	  var textArray = [];
+	  
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 33.979808, lng: -84.506835},
+          zoom: 13
+        });
+		
+		elevator = new google.maps.ElevationService;
+		
+		google.maps.event.addListener(map, "click", function (e) {
+			var myLat, myLng;
+			var myPos;
+			//lat and lng is available in e object
+			var latLng = e.latLng;
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map
+			});
+			markerList.push(marker);
+			for (i=0; i < markerList.length; i++) {
+				myLat = markerList[i].position.lat();
+				myLng = markerList[i].position.lng();
+			}
+			var myNum;
+			if(markerList) {
+				myNum = markerList.length;
+			}else{
+				myNum = 0;
+			}
+			
+			function getCartesianfromDegrees (lat, lng, rad) {
+			
+				// create xyz position from information
+				var phi   = (90-lat)*(Math.PI/180);
+				var theta = (lng+180)*(Math.PI/180);
+				var x = -((rad) * Math.sin(phi)*Math.cos(theta));
+				var z = ((rad) * Math.sin(phi)*Math.sin(theta));
+				var y = ((rad) * Math.cos(phi));
+
+				//return new THREE.Vector3(x,y,z);
+				return [x,y,z].toString();
+			}
+			
+			elevator.getElevationForLocations({
+			    'locations': [{lat: markerList[myNum-1].position.lat(), lng: markerList[myNum-1].position.lng()}]
+			  }, function(results, status) {
+				
+				elevations.push(results[0].elevation);
+				myPos = {lat:myLat, lng:myLng, alt:elevations[myNum-1]};
+				mList.push(myPos);
+				for(j=0; j<mList.length; j++){
+					var myPosArray = [];
+					var textLat = mList[j].lat;
+					var textLng = mList[j].lng;
+					var textAlt = mList[j].alt;
+					myPosArray.push(textLat);
+					myPosArray.push(textLng);
+					myPosArray.push(textAlt);
+					textArray[j] = myPosArray;
+				}
+				document.getElementById("list").innerHTML = "<text>"+textArray.toString()+"</text>";
+				var myRad = getRadius(textLat, textAlt)
+				// report radius from center of earth marker
+				console.log("The radius from center of earth is ... " + myRad);
+				
+				console.log("this is the cart ... " + getCartesianfromDegrees(textLat, textLng, myRad));
+				
+			  	
+			  });
+			
+
+		});
+      }
+	  
+	  
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs5CxPRT9WkbfDqpLAeugAa8jxx369uS4&callback=initMap"
+    async defer>
+	</script>
+	<script src="./assets/js/three.min.js" type="text/javascript"></script>
+
+	<script src="./assets/js/RadLatCalculator.js" type="text/javascript"></script>
+
+</body> 
+</html>
