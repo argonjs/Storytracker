@@ -116,6 +116,11 @@
         $('#draw').click(function() {
             console.log(mList);
             socket.emit('post', mList);
+            socket.emit('request');
+        });
+
+        socket.on('draw', function(res) {
+            console.log(res);
         });
     });
 
