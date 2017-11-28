@@ -1,0 +1,533 @@
+* {margin: 0;padding: 0;
+}
+
+html, body {
+	height: 90%;
+	
+}
+body {
+	
+
+	font-size: 20px;
+	font-weight:800; 
+	font-family: 'Segoe UI‎', arial, serif;color: #000000;
+	margin:0;
+	padding:10px;
+	background: url(../images/bg_g.png) repeat #000 fixed;
+	}
+#header {
+  border-top: 1px solid #000;
+  height: 90px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: black;
+}
+#wrapper1 {
+	 background-color: #EFEFEF;
+	top: 10px;
+	left: 100px;
+	height: 1500px;
+	margin-left: auto;
+  	margin-right: auto;
+  	width: 1360px;
+	
+	}
+.fileIn{
+		display: none!important;
+	}
+#wrapper1 form {
+	width:200px; 
+	height:auto;
+	-moz-border-radius:30px;
+	-webkit-border-radius:30px;
+	border-radius:30px;
+	float:left;
+  margin-left: 58px;
+	
+	}
+	#header-menu-wrap {
+		  background: linear-gradient(#EEB028, #EEB028);
+		  height: 15px;
+	}
+#textblock {
+	float:right;
+	font-size: 14px;
+	width:400px;
+	margin-right: 60px;
+	
+	}
+
+#wrapper {
+	height: 100%;
+	width: 100%;
+	margin:0px;
+	
+	}
+#wrapper form {
+	margin: 0px 0; 
+	width:100%; 
+	height:auto;
+	-moz-border-radius:30px;
+	-webkit-border-radius:30px;
+	border-radius:30px;
+	
+	
+	}
+	
+#form-heading {font-size: 32px;}
+
+
+	/* Header */
+	header{
+		height:150px;
+		overflow:hidden;
+		background:url(../images/logo.png) 0 0 no-repeat;
+	}
+	
+	
+/*
+	Here is where the form class starts, everything above is for the sole purpose of this specific page.
+*/
+
+
+
+
+.form {
+	margin-left: 30px;
+	
+	position:relative;
+	
+	
+	/*max-height: 450px;*/
+	width: 600px;
+		
+	/*
+		box shadow optional and looks best ontop of a textured background
+	*/
+;
+	}
+.form p {
+	margin: 10px 0;
+	font-size: 14px;
+	color: #404040;
+}
+/*
+	h2 tag is optional, if you do use this you are going to need to put the follow line in the header of your html
+	<link href='http://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+*/
+.form h2, .form h3, .form h3, .form h4, .form h4, .form h5, .form h6 {
+	margin: 0 0 0 0;
+	padding: 0 0 0 40px;
+	color: #888;
+	border-bottom: 1px solid #d0d0d0;
+	font-family: 'Raleway', arial, serif
+}
+.form fieldset {
+	padding: 10px;
+	
+	
+}
+.form legend {
+	padding: 0 6px;
+}
+.form hr {
+	background-color:#d0d0d0;
+	border:0;
+	color:#d0d0d0;
+	height:1px;
+}
+.form input, .form textarea {
+	padding: 4px;
+	background: #fff;
+	border: 1px solid #d0d0d0;
+	outline: none;
+}
+.form input:focus, .form textarea:focus {
+	border: 1px solid #516527; /*Change color to fit theme of your site*/
+}
+input[type=button], input[type=submit], input[type=reset], button, .button {
+
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#000;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+	}
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover, button:hover, .button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fff), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #fff 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#ededed');
+	background-color:#fff;
+	}	
+
+input[type=button]:active, input[type=submit]:active, input[type=reset]:active, button:hover, .button:active {
+	position:relative;
+	top:1px;
+	}
+
+.form  label.error, label.error {
+	display: inline;
+	margin: 5px;
+	padding:5px;
+	border:0px  #F0C36D solid;
+	font-weight:800;
+	background:#212121;
+	font-style:italic;
+	color: #F80000;
+	font-style: italic;
+	-webkit-box-shadow: 0px 0px 20px #000;
+	-moz-box-shadow: 0px 0px 20px #000;
+	box-shadow: 0px 0px 20px #000;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	
+	border-radius: 10px;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    opacity:.8;
+     
+	}
+footer{
+
+}
+	
+	/*----------------------------
+		Links Area
+-----------------------------*/
+
+
+#links{
+	
+	padding-top: 20px;
+	padding-right: 10px;
+	font-size: 12px;
+	/*text-shadow: 1px 1px 0 #333333;*/
+	width:50%;
+	margin:0 auto;
+/*links*/
+}
+
+#links a:link {
+	color:#888888;
+	text-decoration: none;
+}
+
+#links a:hover {
+	color:#888888;
+	text-decoration: underline;
+}
+#links a:visited {
+	color:#888888;
+	
+}
+#links a:active{
+	color:#888888;
+	
+}
+
+
+#links p{
+	color: #888888;
+	font-size: 12px;
+	font-style: normal;
+	padding: 30px;
+}
+
+/*------------------POPUPS------------------------*/
+
+#fade {
+
+	display: none;
+
+	background: #000; 
+
+	position: fixed; left: 0; top: 0; 
+
+	z-index: 10;
+
+	width: 100%; height: 100%;
+
+	opacity: .80;
+
+	z-index: 9999;
+
+}
+
+.popup_block{
+
+	display: none;
+
+	background: #fff;
+
+	padding: 20px; 	
+
+	border: 10px solid #EEB028;
+
+	float: left;
+
+	font-size: 0.8em;
+
+	position: fixed;
+
+	top: 50%; left: 50%;
+
+	z-index: 99999;
+
+	-webkit-box-shadow: 0px 0px 20px #000;
+
+	-moz-box-shadow: 0px 0px 20px #000;
+
+	box-shadow: 0px 0px 20px #000;
+
+	-webkit-border-radius: 0px;
+
+	-moz-border-radius: 0px;
+
+	border-radius: 0px;
+
+}
+
+img.btn_close {
+
+	float: right; 
+
+	margin: -55px -55px 0 0;
+
+}
+
+.popup p {
+
+	padding: 5px 10px;
+
+	margin: 5px 0;
+
+}
+
+/*--Making IE6 Understand Fixed Positioning--*/
+
+*html #fade {
+
+	position: absolute;
+
+}
+
+*html .popup_block {
+
+	position: absolute;
+
+}
+
+	
+/*----------------------------
+	The Footer
+-----------------------------*/
+
+#footer {
+		clear:both;
+		position: fixed;
+		display: block;
+		bottom:0;
+		left:0;
+		padding: 0px;
+		margin-top: 5px;
+		width:100%;
+		height: auto;
+		min-height:20px;
+		max-height: px;			/* Height of the footer */   		
+   		font-size: 8px;
+		
+		
+	}
+#footer h2{
+	float:right;
+	width:45%;
+	color:#eee;
+}
+/*___________________________________________________________________________________________________
+eXternal css - experimental
+___________________________________________________________________________________________________
+*/
+.qrcode
+{
+ 	background-color: rgba(33, 33, 33, 0.75);
+ 	margin: 10px;
+	padding: 10px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+}
+.finishedLinkbutton{
+background: #222 repeat-x;
+display: inline-block;
+margin: 5px 0px; 
+padding: 5px 10px 6px;
+color: #fff;
+text-decoration: none;
+font-weight: bold;
+line-height: 1;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+-moz-box-shadow: 0 1px 3px #999;
+-webkit-box-shadow: 0 1px 3px #999;
+text-shadow: 0 -1px 1px #222;
+border-bottom: 1px solid #222;
+position: relative;
+cursor: pointer;
+}
+.finishedLinkbutton:hover{
+	background: blue;
+	text-decoration:underline;
+	
+}
+.finishedLinkbutton:active{
+	background: green;
+}
+.dragandrophandler
+{
+	margin-top: 5px;
+	border:2px dotted #0B85A1;
+
+	height: 70px;
+	color:#92AAB0;
+	text-align:center;
+	vertical-align:middle;
+	padding:20px 25px 10px 10px;
+	margin-bottom:10px;
+	font-size:90%;
+	margin-left: 0px;
+	margin-right: 0px;
+	width: 100%;
+}
+.progressBar {
+    width: 200px;
+    height: 22px;
+    border: 1px solid #ddd;
+    border-radius: 5px; 
+    overflow: hidden;
+    display:inline-block;
+    margin:0px 10px 5px 5px;
+    vertical-align:top;
+}
+ 
+.progressBar div {
+    height: 100%;
+    color: #fff;
+    text-align: center;
+    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+    width: 0;
+    background-color: #0ba1b5; border-radius: 3px; 
+}
+.statusbar
+{
+    min-height:25px;
+    padding:10px 10px 0px 10px;
+    vertical-align:top;
+    margin-bottom: 40px;
+    padding-left: 54px;
+}
+.statusbar:nth-child(odd){
+    background:#EBEFF0;
+}
+.filename
+{
+display:inline-block;
+vertical-align:top;
+margin-right: 50px;
+}
+.filesize
+{
+display:inline-block;
+vertical-align:top;
+color: #30693D;
+width: 250px;
+margin-left: 10px;
+margin-right :5px;
+}
+#returnHTMLSTUFF{
+	width=100%;
+	
+	display: none;
+}
+.abort{
+  width: 90px;
+  display: inline-block;
+  border: 1px solid black;
+  padding: 2px;
+  /* align-content: center; */
+  text-align: center;
+  border-radius: 9px;
+}
+#imgDisplayarea {
+  width: 350px;
+  float: right;
+}
+
+#panoLinkButtons{
+	margin-left: 0px;
+	
+}
+.linkHolder{
+	margin-left: 40px;
+}
+#folderText{
+font-style: 14pt;
+}
+#folderSize{
+font-style: 14pt;
+
+}
+#anotherConversion{
+float:right;	
+margin-top: 65px;
+}
+.buttonDescription{
+	font-size: 12px;
+}
+.linkButton{
+	border: solid 1px;
+	border-radius: 10px;
+	font-size: large;
+	margin-right: 5px;
+	margin-bottom: 20px;	
+}
+.genfilesField{
+	float:left;
+	margin-top: 50px;
+}
+#ExamplePanoTitle{
+	text-align: center;
+}
+#ExampleImage{
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.UploadDoneText{
+	
+	margin-bottom: 30px;
+	
+}
+.title{
+	z-index: 8;
+    color: white;
+    float: right;
+    position: absolute;
+    right: 15px;
+    top: 20px;
+    font-size: 24pt;
+}
