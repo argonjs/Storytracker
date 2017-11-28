@@ -1,0 +1,11 @@
+{
+  "name": "phone-book",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.1",
+    "mysql": "^2.14.1",
+    "socket.io": "^2.0.3"
+  }
+}

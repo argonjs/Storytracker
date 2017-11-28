@@ -4,6 +4,8 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <script src="../socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -25,6 +27,7 @@
   <body>
     <div id="map"></div>
 	<div id="list"></div>
+    <button id="draw">Draw</button>
     <script>
       var map;
 	  var markerList = [];
@@ -105,8 +108,17 @@
 
 		});
       }
-	  
-	  
+
+// Connect to server
+    $(function() {
+        var socket = io.connect('http://localhost:3000');
+
+        $('#draw').click(function() {
+            console.log(mList);
+            socket.emit('post', mList);
+        });
+    });
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs5CxPRT9WkbfDqpLAeugAa8jxx369uS4&callback=initMap"
     async defer>
