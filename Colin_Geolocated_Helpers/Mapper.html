@@ -13,9 +13,13 @@
         height: 70%;
       }
 	  #list {
-		height: 30%;
+		height: 15%;
 		word-wrap: break-word;
 	  }
+      #results {
+        height: 15%;
+        overflow: scroll;
+      }
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
@@ -27,6 +31,7 @@
   <body>
     <div id="map"></div>
 	<div id="list"></div>
+	<div id="results"></div>
     <button id="draw">Draw</button>
     <script>
       var map;
@@ -121,6 +126,12 @@
 
         socket.on('draw', function(res) {
             console.log(res);
+            res.forEach((point) => {
+                $('#results').append(
+                    $('<li/>').append(
+                        $('<p/>').text('lat:' + point.lat + ', lng:' +
+                            point.lng + ', alt:' + point.alt)));
+            });
         });
     });
 
