@@ -10,15 +10,23 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 70%;
+        height: 60%;
       }
-	  #list {
-		height: 15%;
+	  #mlist {
+		height: 6%;
 		word-wrap: break-word;
 	  }
-      #results {
-        height: 15%;
+      #resultList {
+        height: 30%;
         overflow: scroll;
+        list-style-type: none;
+      }
+      #form {
+        height: 4%;
+        overflow: visible;
+      }
+      ul {
+        margin: 0;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -30,9 +38,13 @@
   </head>
   <body>
     <div id="map"></div>
-	<div id="list"></div>
-	<div id="results"></div>
-    <button id="draw">Draw</button>
+	<div id="mlist"></div>
+    <div id="resultList">
+        <ul id="results"></ul>
+    </div>
+    <form id="form">
+        <input id="name" type="text" name="Name"><button id="draw">Draw</button>
+    </form>
     <script>
       var map;
 	  var markerList = [];
@@ -114,25 +126,42 @@
 		});
       }
 
-// Connect to server
-    $(function() {
+    function dropMark(self) {
+        var lat = JSON.parse(self.innerHTML).lat;
+        var lng = JSON.parse(self.innerHTML).lng;
+        var location = new google.maps.LatLng(lat,lng);
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+    }
+
+    //Connect to server
+    $(document).ready(function(){
         var socket = io.connect('http://localhost:3000');
 
-        $('#draw').click(function() {
-            console.log(mList);
-            socket.emit('post', mList);
+        $('#form').submit(function() {
+            var name = $('#name').val()===""? "anonymous": $('#name').val();
+            socket.emit('post', name, mList);
             socket.emit('request');
+            return false;
         });
 
         socket.on('draw', function(res) {
+            $('#results').empty();
             console.log(res);
-            res.forEach((point) => {
+            res.forEach((entry) => {
                 $('#results').append(
-                    $('<li/>').append(
-                        $('<p/>').text('lat:' + point.lat + ', lng:' +
-                            point.lng + ', alt:' + point.alt)));
+                    $('<li/>').text('\"' + entry.name + '\":').append(
+                        $('<ul/>').attr('id', entry.name)));
+                JSON.parse(entry.points).forEach((point) => {
+                    $('#'+entry.name).append(
+                        $('<li/>').append(
+                            $('<p/>').attr('onclick', 'dropMark(this)').text(JSON.stringify(point))));
+                });
             });
         });
+
     });
 
     </script>
