@@ -9,7 +9,7 @@ var express  = require('express'),
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : 'woojung0802',
+  password : 'thytran4498',
   database : 'storytracker'
 });
 try {
@@ -44,11 +44,12 @@ io.on('connection', function(socket) {
 
     socket.on('request', function() {
         console.log('requesting...');
-        connection.query('SELECT * FROM Points', 
+        connection.query('SELECT * FROM Points',
             function(err, result, fields) {
                 if (err) throw err;
-                
+
                 socket.emit('draw', result);
+
             }
         );
     });
@@ -65,8 +66,8 @@ var checkTableExist = function() {
                 'PRIMARY KEY (id)' +
                 ');'
             , (err, result) => {
-                if(err) throw err; 
-                
+                if(err) throw err;
+
                 console.log('Tables does not exist, created one');
             });
         }

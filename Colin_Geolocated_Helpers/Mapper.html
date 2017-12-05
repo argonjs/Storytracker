@@ -44,6 +44,8 @@
     </div>
     <form id="form">
         <input id="name" type="text" name="Name"><button id="draw">Draw</button>
+        <button id="clear">Clear</button>
+
     </form>
     <script>
       var map;
@@ -52,15 +54,15 @@
 	  var elevator;
 	  var elevations = [];
 	  var textArray = [];
-	  
+
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 33.979808, lng: -84.506835},
           zoom: 13
         });
-		
+
 		elevator = new google.maps.ElevationService;
-		
+
 		google.maps.event.addListener(map, "click", function (e) {
 			var myLat, myLng;
 			var myPos;
@@ -81,9 +83,9 @@
 			}else{
 				myNum = 0;
 			}
-			
+
 			function getCartesianfromDegrees (lat, lng, rad) {
-			
+
 				// create xyz position from information
 				var phi   = (90-lat)*(Math.PI/180);
 				var theta = (lng+180)*(Math.PI/180);
@@ -94,11 +96,11 @@
 				//return new THREE.Vector3(x,y,z);
 				return [x,y,z].toString();
 			}
-			
+
 			elevator.getElevationForLocations({
 			    'locations': [{lat: markerList[myNum-1].position.lat(), lng: markerList[myNum-1].position.lng()}]
 			  }, function(results, status) {
-				
+
 				elevations.push(results[0].elevation);
 				myPos = {lat:myLat, lng:myLng, alt:elevations[myNum-1]};
 				mList.push(myPos);
@@ -116,12 +118,12 @@
 				var myRad = getRadius(textLat, textAlt)
 				// report radius from center of earth marker
 				console.log("The radius from center of earth is ... " + myRad);
-				
+
 				console.log("this is the cart ... " + getCartesianfromDegrees(textLat, textLng, myRad));
-				
-			  	
+
+
 			  });
-			
+
 
 		});
       }
@@ -134,6 +136,20 @@
             position: location,
             map: map
         });
+    }
+
+    function test(self) {
+      var items = self.children[0].children;
+      // items.forEach((item) => {
+      //   var location = JSON.parse(item.children[0].innerHTML);
+      //   console.log(location);
+      // });
+
+      for (i = 0; i < items.length; i++) {
+        var p = items[i].children[0];
+        dropMark(p);
+      }
+
     }
 
     //Connect to server
@@ -152,8 +168,9 @@
             console.log(res);
             res.forEach((entry) => {
                 $('#results').append(
-                    $('<li/>').text('\"' + entry.name + '\":').append(
+                    $('<li/>').attr('onclick', 'test(this)').text('\"' + entry.name + '\":').append(
                         $('<ul/>').attr('id', entry.name)));
+                // dropAll(entry)
                 JSON.parse(entry.points).forEach((point) => {
                     $('#'+entry.name).append(
                         $('<li/>').append(
@@ -164,6 +181,53 @@
 
     });
 
+//  NOTHING WORKS SLERKGUHSLKRUGHSELKRUGKLSEHRGKH
+
+    // function dropAll() {
+    //     JSON.parse(entry.points).forEach((point) => {
+    //       var lat= JSON.parse(point.innerHTML).lat;
+    //       var lng = JSON.parse(point.innerHTML).lng;
+    //       var location = new google.maps.LatLng(lat,lng);
+    //       var marker = new google.maps.Marker({
+    //         position: location,
+    //         map: map
+    //     });
+    //   });
+    // }
+/*
+    console.log($('ul').children());
+
+    $('<li/>').click(function() {
+      var kids = $(this).children();
+      console.log(kids);
+      // kids.forEach(function(element) {
+      //   dropMark(element);
+      // });
+      // alert('aaa');
+      console.log("please");
+    });
+    */
+
+    function setMapOnAll(map) {
+      for (var i = 0; i < markerList.length; i++) {
+        markerList[i].setMap(map);
+      }
+    }
+
+    $(document).ready(function(){ // When the DOM is Ready, then bind the click
+
+        $( "#clear" ).click(function() {
+            setMapOnAll(null);
+            myPosArray = [];
+          });
+
+    });
+
+
+
+
+    //placing here should work because clear worked
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs5CxPRT9WkbfDqpLAeugAa8jxx369uS4&callback=initMap"
     async defer>
@@ -172,5 +236,5 @@
 
 	<script src="./assets/js/RadLatCalculator.js" type="text/javascript"></script>
 
-</body> 
+</body>
 </html>
