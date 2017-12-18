@@ -1,0 +1,202 @@
+<!--
+TODO:
+- Orient camera to due North
+- update camera every frame to move with the user (see update function below)
+- increase clipping plane of the camera to see further distanced objects
+- figure out issue with pipe spline extrusion (makes closed loop):
+THREE js example @: https://threejs.org/examples/#webgl_geometry_extrude_splines
+- move kilometer to meter rounding to init map function
+
+-->
+
+
+
+<!doctype HTML>
+<html>
+<script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+<script src="https://cdn.glitch.com/f39c9b2e-08f2-4f4b-89dd-6226b3010aef%2Fthree.min.js?1512432838783"></script>
+<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"> </script>
+  <body style="margin : 0px; overflow: hidden;">
+    <!-- Set up an aframe scene using artoolkit for js -->
+    <a-scene id="scene" embedded arjs>
+      <a-camera id="camera"></a-camera>
+      <!--<a-box color="red" position="0 2 -5" rotation="0 45 45" scale="2 2 2"></a-box>-->
+      <a-box id="box1" color="green" position="1 1 1" rotation="0 45 45" scale=".2 .2 .2"></a-box>
+      <a-box id="box2" color="green" position="516.817354461562/1000 3540.3908325588113/1000 5267.699856531626/1000" rotation="0 45 45" scale="100 100 100"></a-box>
+      <a-box id="box3" color="green" position="517.2129962052989/1000 3540.267869417612/1000 5267.712754706924/1000" rotation="0 45 45" scale="100 100 100"></a-box>
+
+  	  <!--<a-entity id="camera" camera></a-entity>-->
+    </a-scene>
+  </body>
+  <script>
+			// three.js variables
+			var scene;
+			var camera;
+			var renderer;
+      var camInit = 0;
+    
+    //holds value of last camera position
+      var lastX;
+      var lastY;
+      var lastZ;
+    
+      // Earth constants
+	  	var seAvgRad = 6371.001;
+			var eqRad = 6378.137;
+			var poleRad = 6356.752;
+    
+      // geolocation
+      //elevator = new google.maps.ElevationService;
+    
+    
+      /** Helper function for converting longitude and latitude into x y z coordinates */
+		    function getCartesianfromDegrees (lat, lng, rad) {
+					
+				// create xyz position from information
+				var phi   = (90-lat)*(Math.PI/180);
+				var theta = (lng+180)*(Math.PI/180);
+				var x = -((rad) * Math.sin(phi)*Math.cos(theta));
+				var z = ((rad) * Math.sin(phi)*Math.sin(theta));
+				var y = ((rad) * Math.cos(phi));
+
+				//return new THREE.Vector3(x,y,z);
+				return [x,y,z].toString();
+			}
+
+			//function to return elevation based on latitude and input height from google maps.
+			function getRadius (inputLat, inputHeight) {
+				// equation to calculate earth Radius by elevation
+				// R = √ [ (r1² * cos(B))² + (r2² * sin(B))² ] / [ (r1 * cos(B))² + (r2 * sin(B))² ] 
+				var a1 = (eqRad * eqRad) * Math.cos(inputLat);
+				var a1Sq = a1 * a1;
+				
+				var a2 = (poleRad * poleRad) * Math.sin(inputLat);
+				var a2Sq = a2 * a2;
+				
+				var aLat = a1Sq + a2Sq;
+				
+				var b1 = (eqRad) * Math.cos(inputLat);
+				var b1Sq = b1 * b1;
+				
+				var b2 = (poleRad) * Math.sin(inputLat);
+				var b2Sq = b2 * b2;
+				
+				var R = Math.sqrt( (a1Sq + a2Sq)/(b1Sq + b2Sq) );
+				
+				return R + (inputHeight * .001);	
+			}
+
+      // Set up three.js elements here
+      function init() {
+        scene = document.getElementById('scene').object3D;  // THREE.Scene
+        
+        camera = document.getElementById('camera').object3D;
+
+        //set up web GL renderer
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        //add render object to doc as canvas element
+        document.body.appendChild(renderer.domElement);
+      }
+
+      // create a spline from geolocated points
+		  function initSpline() {
+		    //var positions = [516.7571772474337,3539.988161738086,5267.8782748074855,516.6214638345164,3540.044253798237,5267.875536920278, 516.85628494997,3540.1566976877452,5267.792132434926];
+  
+				//add pipe spline to the scene
+			    var pipeSpline = new THREE.CatmullRomCurve3([
+            //new THREE.Vector3(516.7571772474337/1000,3539.988161738086/1000,5267.8782748074855/1000), 
+            //new THREE.Vector3(517.6214638345164/1000,3540.044253798237/1000,5267.875536920278/1000),
+            //new THREE.Vector3(516.3028121100741/1000,3540.672230607292/1000,5267.632078781971/1000),
+            new THREE.Vector3(516.511278741216/1000,3540.2306691135145/1000,5267.808121811522/1000),
+            new THREE.Vector3(516.817354461562/1000,3540.3908325588113/1000,5267.699856531626/1000),
+            new THREE.Vector3(517.2129962052989/1000,3540.267869417612/1000,5267.712754706924/1000)]);
+        // var pipeSpline = new THREE.CatmullRomCurve3([
+        //     new THREE.Vector3(0,0,0), 
+        //     new THREE.Vector3(1,0,0),
+        //     new THREE.Vector3(3,0,0)]);
+          var material = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
+          var wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0xFF0000, opacity: 0.3, wireframe: true, transparent: true } );
+          var params =  {
+              scale: 1,
+              extrusionSegments: 100,
+              radius: 0.01,
+              radiusSegments: 100,
+              closed: false,
+              animationView: false,
+              lookAhead: false,
+              cameraHelper: false
+          };
+          tubeGeometry = new THREE.TubeBufferGeometry( pipeSpline, params.extrusionSegments, params.radius, params.radiusSegments, params.closed );
+          var group = THREE.SceneUtils.createMultiMaterialObject( tubeGeometry, [ material, wireframeMaterial ] );
+          group.scale.set( params.scale, params.scale, params.scale );
+          
+          scene.add(group);
+
+          //offset the camera
+          // camera.position.x = 516.7571772474337;
+          // camera.position.y = 3539.988161738086;
+          // camera.position.z = 5267.8782748074855;
+          //camera.position.z = 10;
+      }
+
+			//update positions here
+			function update() {
+				//called every frame
+  
+        //place camera near first point
+        //if (!camInit) {
+        
+          camera.position.x = 516.9278892031351/1000;
+          camera.position.y = 3539.98757762111/1000;
+          camera.position.z = (5267.872293000634)/1000;
+        
+          var box = document.getElementById('box1').object3D;
+          box.position.x = 516.817354461562/1000;
+          box.position.y = 3540.3908325588113/1000;
+          box.position.z = 5267.699856531626/1000 - 1;
+          
+          lastX = camera.position.x;
+          lastY = camera.position.y;
+          lastZ = camera.position.z;
+          camInit = 1;
+        //} 
+        /*else {
+        //TODO: Get user location and update the position of the camera if the user moves past a certain threshold
+        
+           // Try HTML5 geolocation.
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+              
+              elevator.getElevationForLocations({
+                  'locations': [pos.lat, pos.lng]
+                }, function(results, status) {
+                  var myRad = getRadius(textLat, results[0].elevation);
+                var getCartesianfromDegrees(textLat, textLng, myRad);
+
+
+              });
+            }
+          }
+        } */
+        
+			}
+
+			// create render loop
+			function animate() {
+				update();
+
+				requestAnimationFrame( animate );
+				renderer.render( scene, camera );
+			}
+    
+			init();
+			initSpline();
+			animate();
+    
+  </script>
+</html>
