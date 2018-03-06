@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, WebVR! - A-Frame</title>
+    <meta name="description" content="Hello, WebVR! - A-Frame">
+    <script src='aframe-master.js'></script>
+    <script src='aframe-xr.js'></script>
+  </head>
+  <body>
+    <a-scene>
+	<a-assets>
+		<video id="prim-video" src="primitivesVideo.mp4" autoplay="true" loop="true">
+			<track kind="subtitles" label="English subtitles" src="primTrack.vtt" srclang="en" default></track>
+		</video>
+	</a-assets>
+		<a-plane position="-4 4 -8" rotation="0 0 0" width="4" height="4" color="#FFFFFF" shadow xr="ar: false;" material="src: #prim-video"></a-plane>
+      
+		<a-sky color="#ECECEC" side="back" xr="ar: false"></a-sky>
+		<a-entity id="masterContent">
+			<a-entity id="content"></a-entity>
+		</a-entity>
+    </a-scene>
+	<script>
+		var videoElement = document.querySelector("video");
+		var textTracks = videoElement.textTracks; // one for each track element
+		var textTrack = textTracks[0]; // corresponds to the first track element
+		console.log(textTrack);
+		var kind = textTrack.kind // e.g. "subtitles"
+		var mode = textTrack.mode // e.g. "disabled", hidden" or "showing"
+		var myScene = document.querySelector('a-scene');
+		
+		/*
+		textTrack.oncuechange = function (){
+		  // "this" is a textTrack
+		  var cue = this.activeCues[0]; // assuming there is only one active cue
+		  resetCues();
+		  
+		}*/
+		
+		var trackElements = document.querySelectorAll("track");
+		// for each track element
+		for (var i = 0; i < trackElements.length; i++) {
+		  trackElements[i].addEventListener("load", function() {
+				var textTrack = this.track; // gotcha: "this" is an HTMLTrackElement, not a TextTrack object
+				// for each cue
+				for (var j = 0; j < textTrack.cues.length; ++j) {
+					var cue = textTrack.cues[j];
+					// do something
+					resetCues(cue);
+				}
+			});
+		}
+		
+		function resetCues(myCue) {
+		// do something
+			myCue.onenter = function(){
+				var myobj = textTracks[0].activeCues[0].text;
+				// do something
+				console.log(myobj);
+				var myContent = document.getElementById("masterContent");
+				myContent.innerHTML = myobj;
+				myScene.appendChild(myContent);
+							
+							
+			};
+
+			myCue.onexit = function(){
+						// do something else
+						var myContent = document.getElementById('content');
+						myContent.parentNode.removeChild(myContent);
+			};
+			
+		}
+		
+		
+		
+		
+	</script>
+  </body>
+</html>
